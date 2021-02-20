@@ -6,6 +6,7 @@ const logchId = "806181322451845130";
 var logch = null;
 
 var helpResponses = ["Сам знаешь что я делаю!", "Принеси еду, покажу.", "Отстань", "Дай поспать", "Я в туалете, подожди!", "Да достали вы все!\nВот что я делаю:\n1. Тупо Ничего", "Ладно, вот настояшии команды:\n1. ~help\n2. ~hom [?int]\n3. ~carp"];
+var pingResponses = ["Меня звали?", "Что", "Чего вам надо?", "Я тут!", "Надоел! Дай поесть!", "Замолчи"];
 
 function rand(min, max) {
     return Math.random() * (max - min) + min;
@@ -55,6 +56,11 @@ process.on('unhandledRejection', function(reason, p) {
 client.on('message', function(message) {
     if (message.author.bot)
         return;
+
+    if (message.mentions.has(client.user)) {
+        message.reply(pingResponses[randInt(0, pingResponses.length - 1)]);
+        return;
+    }
 
     if (message.content.startsWith("~")) {
         var args = message.content.split(' ');
