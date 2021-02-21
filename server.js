@@ -60,14 +60,27 @@ function smartSplit(string, separator, combiner) {
     var startArgIndex = 0;
     for (var i = 0; i < args.length; i++) {
         if (args[i].startsWith(combiner)) {
-            fargs.push(args[i].substr(combiner.length) + separator);
-            startArgIndex = i;
-            inArg = true;
+            if (i < args.length)
+                fargs.push(args[i].substr(combiner.length) + separator);
+            else
+                fargs.push(args[i].substr(combiner.length));
+            if (args[i].endsWith(combiner)) {
+                if (i < args.length)
+                    fargs[i] = fargs[i].substr(0, fargs[i].length - combiner.length - separator.length);
+                else
+                    fargs[i] = fargs[i].substr(0, fargs[i].length - combiner.length);
+            } else {
+                startArgIndex = i;
+                inArg = true;
+            }
         } else if (args[i].endsWith(combiner)) {
             fargs[startArgIndex] += args[i].substr(0, args[i].length - combiner.length);
             inArg = false;
         } else if (inArg) {
-            fargs[startArgIndex] += args[i] + separator;
+            if (i < args.length)
+                fargs[startArgIndex] += args[i] + separator;
+            else
+                fargs[startArgIndex] += args[i];
         } else {
             fargs.push(args[i]);
         }
