@@ -206,7 +206,7 @@ client.on('message', function(message) {
                         message.member.voice.channel.join().then(connection => {
                             connectedVoice = connection;
                             message.channel.send("Connected");
-                            connection.play('./audio/song.mp3', { volume: false });
+                            connection.play('./audio/song.mp3', { volume: 1 });
                         }).catch(e => {
                             message.channel.send("Error");
                             console.error(e);
