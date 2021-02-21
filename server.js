@@ -54,13 +54,16 @@ process.on('unhandledRejection', function(reason, p) {
 });
 
 client.on('message', function(message) {
-    if (message.author.bot)
+    if (message.author == client.user)
         return;
 
     if (message.mentions.has(client.user)) {
         message.reply(pingResponses[randInt(0, pingResponses.length - 1)]);
         return;
     }
+
+    if (message.author.bot)
+        return;
 
     if (message.content.startsWith("~")) {
         var args = message.content.split(' ');
