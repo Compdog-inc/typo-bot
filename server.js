@@ -53,6 +53,28 @@ process.on('unhandledRejection', function(reason, p) {
     errorHandler.handleRejection(reason, p);
 });
 
+function smartSplit(string, separator, combiner) {
+    var args = string.split(separator);
+    var fargs = [];
+    var inArg = false;
+    var startArgIndex = 0;
+    for (var i = 0; i < args.length; i++) {
+        if (args[i].startsWith(combiner)) {
+            fargs.push(args[i].substr(combiner.length) + separator);
+            startArgIndex = i;
+            inArg = true;
+        } else if (args[i].endsWith(combiner)) {
+            fargs[startArgIndex] += args[i].substr(0, args[i].length - combiner.length);
+            inArg = false;
+        } else if (inArg) {
+            fargs[startArgIndex] += args[i] + separator;
+        } else {
+            fargs.push(args[i]);
+        }
+    }
+    return fargs;
+}
+
 client.on('message', function(message) {
     if (message.author == client.user)
         return;
@@ -66,8 +88,7 @@ client.on('message', function(message) {
         return;
 
     if (message.content.startsWith("~")) {
-        var args = message.content.split(' ');
-        args[0] = args[0].substr(1);
+        var args = smartSplit(message.content.substr(1), ' ', '"');
         switch (args[0].toLowerCase()) {
             case "help":
                 message.channel.send(helpResponses[randInt(0, helpResponses.length - 1)]);
