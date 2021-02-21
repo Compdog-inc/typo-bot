@@ -81,14 +81,18 @@ client.on('message', function(message) {
                         txt += "Hom! -∞"
                     else {
                         var n = parseInt(args[1]);
-                        if (n < 0)
-                            txt += "Hom! -∞"
-                        else if (n <= 400) {
+                        if (n < 0 && n >= -400) {
+                            txt += "~~";
+                            for (var i = 0; i < Math.abs(n); i++) {
+                                txt += "Hom! ";
+                            }
+                            txt += "~~";
+                        } else if (n <= 400) {
                             for (var i = 0; i < n; i++) {
                                 txt += "Hom! ";
                             }
                         } else if (n == 0)
-                            txt += "~~Hom!~~";
+                            txt += "~~???~~";
                         else
                             txt += "???";
                     }
