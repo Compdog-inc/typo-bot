@@ -115,7 +115,7 @@ function smartSplit(string, separator, combiner) {
 }
 
 function playSong(connection) {
-    var dispatcher = connection.play(Path.join(__dirname, './audio/song.mp3'));
+    var dispatcher = connection.play(Path.join(__dirname__, './audio/song.mp3'));
     //dispatcher.on('finish', playSong(connection));
 }
 
