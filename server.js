@@ -203,6 +203,22 @@ client.on('message', function(message) {
                         message.channel.send("Join a voice channel first.");
                         break;
                     }
+                } else if (message.member.voice && message.member.voice.channel != connectedVoice) {
+                    if (message.member.voice && message.member.voice.channel) {
+                        if (connectedVoice)
+                            connectedVoice.disconnect();
+                        connectedVoice = null;
+                        message.member.voice.channel.join().then(connection => {
+                            connectedVoice = connection;
+                            message.channel.send("Connected");
+                        }).catch(e => {
+                            message.channel.send("Error");
+                            console.error(e);
+                        });
+                    } else {
+                        message.channel.send("Join a voice channel first.");
+                        break;
+                    }
                 }
                 if (args.length > 1) {
                     if (args[1].toLowerCase() == "stop") {
