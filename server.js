@@ -190,6 +190,14 @@ client.on('message', function(message) {
                 message.reply("https://github.com/Compdog-inc/typo-bot");
                 break;
             case "sing":
+                if (args.length > 1) {
+                    if (args[1].toLowerCase() == "stop") {
+                        if (connectedVoice)
+                            connectedVoice.disconnect();
+                        connectedVoice = null;
+                        break;
+                    }
+                }
                 if (connectedVoice == null) {
                     if (message.member.voice && message.member.voice.channel) {
                         message.member.voice.channel.join().then(connection => {
@@ -215,13 +223,6 @@ client.on('message', function(message) {
                     } else {
                         message.channel.send("Join a voice channel first.");
                         break;
-                    }
-                }
-                if (args.length > 1) {
-                    if (args[1].toLowerCase() == "stop") {
-                        if (connectedVoice)
-                            connectedVoice.disconnect();
-                        connectedVoice = null;
                     }
                 }
                 break;
