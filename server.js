@@ -85,9 +85,9 @@ client.on('message', function(message) {
                             for (var i = 0; i < n; i++) {
                                 txt += "Hom! ";
                             }
-                        } else if (m < 0)
+                        } else if (n < 0)
                             txt += "Hom! -∞"
-                        else if (m == 0)
+                        else if (n == 0)
                             txt += "~~Hom!~~";
                         else
                             txt += "???";
