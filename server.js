@@ -75,20 +75,22 @@ client.on('message', function(message) {
             case "hom":
                 var txt = "";
                 if (args.length > 1) {
-                    if (args[1].toLowerCase() == "infinity" || args[1].toLowerCase() == "∞") {
+                    if (args[1].toLowerCase() == "infinity" || args[1].toLowerCase() == "∞")
                         txt += "Hom! ∞"
-                    }
-                    if (args[1].toLowerCase() == "-infinity" || args[1].toLowerCase() == "-∞") {
+                    if (args[1].toLowerCase() == "-infinity" || args[1].toLowerCase() == "-∞")
                         txt += "Hom! -∞"
-                    } else {
+                    else {
                         var n = parseInt(args[1]);
                         if (n <= 400) {
                             for (var i = 0; i < n; i++) {
                                 txt += "Hom! ";
                             }
-                        } else {
-                            txt += "Hom! ∞"
-                        }
+                        } else if (m < 0)
+                            txt += "Hom! -∞"
+                        else if (m == 0)
+                            txt += "~~Hom!~~";
+                        else
+                            txt += "???";
                     }
                 } else
                     txt = "Hom!";
