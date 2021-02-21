@@ -81,7 +81,9 @@ client.on('message', function(message) {
                         txt += "Hom! -∞"
                     else {
                         var n = parseInt(args[1]);
-                        if (n < 0 && n >= -396) {
+                        if (n == 0)
+                            txt += "~~???~~";
+                        else if (n < 0 && n >= -396) {
                             txt += "~~";
                             for (var i = 0; i < Math.abs(n); i++) {
                                 txt += "Hom! ";
@@ -95,8 +97,6 @@ client.on('message', function(message) {
                             }
                         } else if (n > 400)
                             txt += "Hom! ∞"
-                        else if (n == 0)
-                            txt += "~~???~~";
                         else
                             txt += "???";
                     }
