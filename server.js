@@ -5,11 +5,13 @@ const client = new Discord.Client();
 const logchId = "806181322451845130";
 var logch = null;
 
-var helpResponses = ["Сам знаешь что я делаю!", "Принеси еду, покажу.", "Отстань", "Дай поспать", "Я в туалете, подожди!", "Да достали вы все!\nВот что я делаю:\n1. Тупо Ничего", "Ладно, вот настоящие команды:\n1. ~help\n2. ~hom [?int]\n3. ~carp\n4. ~status [?online|idle|invisible|dnd]\n5. ~activity [?ACTIVITY-TYPE] [?ACTIVITY-NAME]\n6. ~src\n7. ~sing"];
+var helpResponses = ["Сам знаешь что я делаю!", "Принеси еду, покажу.", "Отстань", "Дай поспать", "Я в туалете, подожди!", "Да достали вы все!\nВот что я делаю:\n1. Тупо Ничего", "Ладно, вот настоящие команды:\n1. ~help\n2. ~hom [?int]\n3. ~carp\n4. ~status [?online|idle|invisible|dnd]\n5. ~activity [?ACTIVITY-TYPE] [?ACTIVITY-NAME]\n6. ~src\n7. ~sing [?stop]"];
 var pingResponses = ["Меня звали?", "Что", "Чего вам надо?", "Я тут!", "Надоел! Дай поесть!", "Замолчи", "...", ":|", "Да...", "Я не хочу идти!", "Error (404): Brain not Found", "Я тебе зачем", "Дай потупить", "Ты тупой?"];
 
 var helpResponsesUsed = [];
 var pingResponsesUsed = [];
+
+var connectedVoice = null;
 
 function rand(min, max) {
     return Math.random() * (max - min) + min;
@@ -188,15 +190,26 @@ client.on('message', function(message) {
                 message.reply("https://github.com/Compdog-inc/typo-bot");
                 break;
             case "sing":
-                if (message.member.voice && message.member.voice.channel) {
-                    message.member.voice.channel.join().then(connection => {
-                        message.channel.send("Connected");
-                    }).catch(e => {
-                        message.channel.send("Error");
-                        console.error(e);
-                    });
-                } else {
-                    message.channel.send("Join a voice channel first.");
+                if (connectedVoice == null) {
+                    if (message.member.voice && message.member.voice.channel) {
+                        message.member.voice.channel.join().then(connection => {
+                            connectedVoice = connection;
+                            message.channel.send("Connected");
+                        }).catch(e => {
+                            message.channel.send("Error");
+                            console.error(e);
+                        });
+                    } else {
+                        message.channel.send("Join a voice channel first.");
+                        break;
+                    }
+                }
+                if (args.length > 1) {
+                    if (args[1].toLowerCase() == "stop") {
+                        if (connectedVoice)
+                            connectedVoice.disconnect();
+                        connectedVoice = null;
+                    }
                 }
                 break;
         }
