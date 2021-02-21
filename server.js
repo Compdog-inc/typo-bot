@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const Path = require("path");
 
 const client = new Discord.Client();
 
@@ -113,6 +114,13 @@ function smartSplit(string, separator, combiner) {
     return fargs;
 }
 
+function playSong(connection) {
+    var dispatcher = connection.playFile(Path.join(__dirname, './audio/song.mp3'));
+    dispatcher.on('end', end => {
+        playSong(connection);
+    });
+}
+
 client.on('message', function(message) {
     if (message.author == client.user)
         return;
@@ -206,7 +214,7 @@ client.on('message', function(message) {
                         message.member.voice.channel.join().then(connection => {
                             connectedVoice = connection;
                             message.channel.send("Connected");
-                            connection.play('./audio/song.mp3', { volume: 1 });
+                            playSong(connection);
                         }).catch(e => {
                             message.channel.send("Error");
                             console.error(e);
@@ -220,7 +228,7 @@ client.on('message', function(message) {
                         message.member.voice.channel.join().then(connection => {
                             connectedVoice = connection;
                             message.channel.send("Connected");
-                            connection.play('./audio/song.mp3', { volume: 1 });
+                            playSong(connection);
                         }).catch(e => {
                             message.channel.send("Error");
                             console.error(e);
