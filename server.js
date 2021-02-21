@@ -5,7 +5,7 @@ const client = new Discord.Client();
 const logchId = "806181322451845130";
 var logch = null;
 
-var helpResponses = ["Сам знаешь что я делаю!", "Принеси еду, покажу.", "Отстань", "Дай поспать", "Я в туалете, подожди!", "Да достали вы все!\nВот что я делаю:\n1. Тупо Ничего", "Ладно, вот настоящие команды:\n1. ~help\n2. ~hom [?int]\n3. ~carp"];
+var helpResponses = ["Сам знаешь что я делаю!", "Принеси еду, покажу.", "Отстань", "Дай поспать", "Я в туалете, подожди!", "Да достали вы все!\nВот что я делаю:\n1. Тупо Ничего", "Ладно, вот настоящие команды:\n1. ~help\n2. ~hom [?int]\n3. ~carp\n4. ~status [?online|idle|invisible|dnd]\n5. ~activity [?ACTIVITY-TYPE] [?ACTIVITY-NAME]"];
 var pingResponses = ["Меня звали?", "Что", "Чего вам надо?", "Я тут!", "Надоел! Дай поесть!", "Замолчи"];
 
 function rand(min, max) {
@@ -77,9 +77,17 @@ client.on('message', function(message) {
                 if (args.length > 1) {
                     if (args[1].toLowerCase() == "infinity" || args[1].toLowerCase() == "∞") {
                         txt += "Hom! ∞"
+                    }
+                    if (args[1].toLowerCase() == "-infinity" || args[1].toLowerCase() == "-∞") {
+                        txt += "Hom! -∞"
                     } else {
-                        for (var i = 0; i < parseInt(args[1]); i++) {
-                            txt += "Hom! ";
+                        var n = parseInt(args[1]);
+                        if (n <= 400) {
+                            for (var i = 0; i < n; i++) {
+                                txt += "Hom! ";
+                            }
+                        } else {
+                            txt += "Hom! ∞"
                         }
                     }
                 } else
@@ -92,6 +100,22 @@ client.on('message', function(message) {
                         "./images/carp.gif"
                     ]
                 });
+                break;
+            case "status":
+                if (args.length > 1) {
+                    client.user.setStatus(args[1].toLowerCase());
+                } else {
+                    client.user.setStatus('online');
+                }
+                break;
+            case "activity":
+                if (args.length > 2) {
+                    client.user.setActivity(args[2], { type: args[1].toLowerCase() });
+                } else if (args.length > 1) {
+                    client.user.setActivity(args[1], { type: 'PLAYING' });
+                } else {
+                    client.user.setActivity();
+                }
                 break;
         }
     }
