@@ -6,7 +6,10 @@ const logchId = "806181322451845130";
 var logch = null;
 
 var helpResponses = ["Сам знаешь что я делаю!", "Принеси еду, покажу.", "Отстань", "Дай поспать", "Я в туалете, подожди!", "Да достали вы все!\nВот что я делаю:\n1. Тупо Ничего", "Ладно, вот настоящие команды:\n1. ~help\n2. ~hom [?int]\n3. ~carp\n4. ~status [?online|idle|invisible|dnd]\n5. ~activity [?ACTIVITY-TYPE] [?ACTIVITY-NAME]\n6. ~src"];
-var pingResponses = ["Меня звали?", "Что", "Чего вам надо?", "Я тут!", "Надоел! Дай поесть!", "Замолчи", "...", ":|", "Да...", "Я не хочу идти!", "Error (404): Brain not Found", "Я тебе зачем", "Дай потупить", "%USER%"];
+var pingResponses = ["Меня звали?", "Что", "Чего вам надо?", "Я тут!", "Надоел! Дай поесть!", "Замолчи", "...", ":|", "Да...", "Я не хочу идти!", "Error (404): Brain not Found", "Я тебе зачем", "Дай потупить", "Ты тупой?"];
+
+var helpResponsesUsed = [];
+var pingResponsesUsed = [];
 
 function rand(min, max) {
     return Math.random() * (max - min) + min;
@@ -15,7 +18,27 @@ function rand(min, max) {
 function randInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
+function getPingResponse() {
+    if (pingResponsesUsed.length >= pingResponses.length)
+        pingResponsesUsed = [];
+    var r = randInt(0, pingResponses.length);
+    if (pingResponsesUsed.includes(r))
+        return getPingResponse();
+    pingResponsesUsed.push(r);
+    return pingResponses[r];
+}
+
+function getHelpResponse() {
+    if (helpResponsesUsed.length >= helpResponses.length)
+        helpResponsesUsed = [];
+    var r = randInt(0, helpResponses.length);
+    if (helpResponsesUsed.includes(r))
+        return getHelpResponse();
+    helpResponsesUsed.push(r);
+    return helpResponses[r];
 }
 
 function getDefaultEmbed() {
@@ -93,7 +116,7 @@ client.on('message', function(message) {
         return;
 
     if (message.mentions.has(client.user)) {
-        message.reply(pingResponses[randInt(0, pingResponses.length - 1)].replace("%USER%", message.author.toString()));
+        message.reply(getPingResponse().replace("%USER%", message.author.toString()));
         return;
     }
 
@@ -104,7 +127,7 @@ client.on('message', function(message) {
         var args = smartSplit(message.content.substr(1), ' ', '"');
         switch (args[0].toLowerCase()) {
             case "help":
-                message.channel.send(helpResponses[randInt(0, helpResponses.length - 1)]);
+                message.channel.send(getHelpResponse());
                 break;
             case "hom":
                 var txt = "";
