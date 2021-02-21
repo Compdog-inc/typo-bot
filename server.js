@@ -205,9 +205,6 @@ client.on('message', function(message) {
                     }
                 } else if (message.member.voice && message.member.voice.channel != connectedVoice) {
                     if (message.member.voice && message.member.voice.channel) {
-                        if (connectedVoice)
-                            connectedVoice.disconnect();
-                        connectedVoice = null;
                         message.member.voice.channel.join().then(connection => {
                             connectedVoice = connection;
                             message.channel.send("Connected");
