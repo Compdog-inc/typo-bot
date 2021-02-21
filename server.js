@@ -192,8 +192,11 @@ client.on('message', function(message) {
             case "sing":
                 if (args.length > 1) {
                     if (args[1].toLowerCase() == "stop") {
-                        if (connectedVoice)
+                        if (connectedVoice) {
                             connectedVoice.disconnect();
+                            message.channel.send("Disconnected");
+                        } else
+                            message.channel.send("Not connected to voice channel.");
                         connectedVoice = null;
                         break;
                     }
@@ -203,6 +206,7 @@ client.on('message', function(message) {
                         message.member.voice.channel.join().then(connection => {
                             connectedVoice = connection;
                             message.channel.send("Connected");
+                            connection.play('./audio/song.mp3', { volume: false });
                         }).catch(e => {
                             message.channel.send("Error");
                             console.error(e);
@@ -216,6 +220,7 @@ client.on('message', function(message) {
                         message.member.voice.channel.join().then(connection => {
                             connectedVoice = connection;
                             message.channel.send("Connected");
+                            connection.play('./audio/song.mp3', { volume: 1 });
                         }).catch(e => {
                             message.channel.send("Error");
                             console.error(e);
