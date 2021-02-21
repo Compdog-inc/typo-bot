@@ -120,7 +120,7 @@ client.on('message', function(message) {
                 break;
             case "activity":
                 if (args.length > 2) {
-                    client.user.setActivity(args[2], { type: args[1].toLowerCase() });
+                    client.user.setActivity(args[2], { type: args[1].toUpperCase() });
                 } else if (args.length > 1) {
                     client.user.setActivity(args[1], { type: 'PLAYING' });
                 } else {
