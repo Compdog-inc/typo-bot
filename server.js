@@ -188,7 +188,7 @@ client.on('message', function(message) {
                 message.reply("https://github.com/Compdog-inc/typo-bot");
                 break;
             case "sing":
-                if (message.member.voice) {
+                if (message.member.voice && message.member.voice.channel) {
                     message.member.voice.channel.join().then(connection => {
                         message.channel.send("Connected");
                     }).catch(e => {
