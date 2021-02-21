@@ -87,11 +87,15 @@ client.on('message', function(message) {
                                 txt += "Hom! ";
                             }
                             txt += "~~";
-                        } else if (n <= 400) {
+                        } else if (n < -396)
+                            txt += "Hom! -∞"
+                        else if (n <= 400) {
                             for (var i = 0; i < n; i++) {
                                 txt += "Hom! ";
                             }
-                        } else if (n == 0)
+                        } else if (n > 400)
+                            txt += "Hom! ∞"
+                        else if (n == 0)
                             txt += "~~???~~";
                         else
                             txt += "???";
