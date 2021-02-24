@@ -131,118 +131,137 @@ client.on('message', function(message) {
     if (message.author.bot)
         return;
 
-    if (message.content.startsWith("~")) {
-        var args = smartSplit(message.content.substr(1), ' ', '"');
-        switch (args[0].toLowerCase()) {
-            case "help":
-                message.channel.send(getHelpResponse());
-                break;
-            case "hom":
-                var txt = "";
-                if (args.length > 1) {
-                    if (args[1].toLowerCase() == "infinity" || args[1].toLowerCase() == "∞")
-                        txt += "Hom! ∞"
-                    if (args[1].toLowerCase() == "-infinity" || args[1].toLowerCase() == "-∞")
-                        txt += "Hom! -∞"
-                    else {
-                        var n = parseInt(args[1]);
-                        if (n == 0)
-                            txt += "~~???~~";
-                        else if (n < 0 && n >= -396) {
-                            txt += "~~";
-                            for (var i = 0; i < Math.abs(n); i++) {
-                                txt += "Hom! ";
-                            }
-                            txt += "~~";
-                        } else if (n < -396)
-                            txt += "Hom! -∞"
-                        else if (n <= 400) {
-                            for (var i = 0; i < n; i++) {
-                                txt += "Hom! ";
-                            }
-                        } else if (n > 400)
-                            txt += "Hom! ∞"
-                        else
-                            txt += "???";
-                    }
-                } else
-                    txt = "Hom!";
-                message.channel.send(txt);
-                break;
-            case "carp":
-                message.channel.send("Вот", {
-                    files: [
-                        "./images/carp.gif"
-                    ]
-                });
-                break;
-            case "status":
-                if (args.length > 1) {
-                    client.user.setStatus(args[1].toLowerCase());
-                } else {
-                    client.user.setStatus('online');
-                }
-                break;
-            case "activity":
-                if (args.length > 2) {
-                    client.user.setActivity(args[2], { type: args[1].toUpperCase() });
-                } else if (args.length > 1) {
-                    client.user.setActivity(args[1], { type: 'PLAYING' });
-                } else {
-                    client.user.setActivity();
-                }
-                break;
-            case "src":
-                message.reply("https://github.com/Compdog-inc/typo-bot");
-                break;
-            case "sing":
-                if (args.length > 1) {
-                    if (args[1].toLowerCase() == "stop") {
-                        if (connectedVoice) {
-                            connectedVoice.disconnect();
-                            message.channel.send("Disconnected");
-                        } else
-                            message.channel.send("Not connected to voice channel.");
-                        connectedVoice = null;
-                        break;
-                    }
-                }
-                if (connectedVoice == null) {
-                    if (message.member.voice && message.member.voice.channel) {
-                        message.member.voice.channel.join().then(connection => {
-                            connectedVoice = connection;
-                            message.channel.send("Connected");
-                            playSong(connection);
-                        }).catch(e => {
-                            message.channel.send("Error");
-                            console.error(e);
-                        });
-                    } else {
-                        message.channel.send("Join a voice channel first.");
-                        break;
-                    }
-                } else if (message.member.voice && message.member.voice.channel != connectedVoice) {
-                    if (message.member.voice && message.member.voice.channel) {
-                        message.member.voice.channel.join().then(connection => {
-                            connectedVoice = connection;
-                            message.channel.send("Connected");
-                            playSong(connection);
-                        }).catch(e => {
-                            message.channel.send("Error");
-                            console.error(e);
-                        });
-                    } else {
-                        message.channel.send("Join a voice channel first.");
-                        break;
-                    }
-                }
-                break;
-        }
-    }
+    /*  if (message.content.startsWith("~")) {
+          var args = smartSplit(message.content.substr(1), ' ', '"');
+          switch (args[0].toLowerCase()) {
+              case "help":
+                  message.channel.send(getHelpResponse());
+                  break;
+              case "hom":
+                  var txt = "";
+                  if (args.length > 1) {
+                      if (args[1].toLowerCase() == "infinity" || args[1].toLowerCase() == "∞")
+                          txt += "Hom! ∞"
+                      if (args[1].toLowerCase() == "-infinity" || args[1].toLowerCase() == "-∞")
+                          txt += "Hom! -∞"
+                      else {
+                          var n = parseInt(args[1]);
+                          if (n == 0)
+                              txt += "~~???~~";
+                          else if (n < 0 && n >= -396) {
+                              txt += "~~";
+                              for (var i = 0; i < Math.abs(n); i++) {
+                                  txt += "Hom! ";
+                              }
+                              txt += "~~";
+                          } else if (n < -396)
+                              txt += "Hom! -∞"
+                          else if (n <= 400) {
+                              for (var i = 0; i < n; i++) {
+                                  txt += "Hom! ";
+                              }
+                          } else if (n > 400)
+                              txt += "Hom! ∞"
+                          else
+                              txt += "???";
+                      }
+                  } else
+                      txt = "Hom!";
+                  message.channel.send(txt);
+                  break;
+              case "carp":
+                  message.channel.send("Вот", {
+                      files: [
+                          "./images/carp.gif"
+                      ]
+                  });
+                  break;
+              case "status":
+                  if (args.length > 1) {
+                      client.user.setStatus(args[1].toLowerCase());
+                  } else {
+                      client.user.setStatus('online');
+                  }
+                  break;
+              case "activity":
+                  if (args.length > 2) {
+                      client.user.setActivity(args[2], { type: args[1].toUpperCase() });
+                  } else if (args.length > 1) {
+                      client.user.setActivity(args[1], { type: 'PLAYING' });
+                  } else {
+                      client.user.setActivity();
+                  }
+                  break;
+              case "src":
+                  message.reply("https://github.com/Compdog-inc/typo-bot");
+                  break;
+              case "sing":
+                  if (args.length > 1) {
+                      if (args[1].toLowerCase() == "stop") {
+                          if (connectedVoice) {
+                              connectedVoice.disconnect();
+                              message.channel.send("Disconnected");
+                          } else
+                              message.channel.send("Not connected to voice channel.");
+                          connectedVoice = null;
+                          break;
+                      }
+                  }
+                  if (connectedVoice == null) {
+                      if (message.member.voice && message.member.voice.channel) {
+                          message.member.voice.channel.join().then(connection => {
+                              connectedVoice = connection;
+                              message.channel.send("Connected");
+                              playSong(connection);
+                          }).catch(e => {
+                              message.channel.send("Error");
+                              console.error(e);
+                          });
+                      } else {
+                          message.channel.send("Join a voice channel first.");
+                          break;
+                      }
+                  } else if (message.member.voice && message.member.voice.channel != connectedVoice) {
+                      if (message.member.voice && message.member.voice.channel) {
+                          message.member.voice.channel.join().then(connection => {
+                              connectedVoice = connection;
+                              message.channel.send("Connected");
+                              playSong(connection);
+                          }).catch(e => {
+                              message.channel.send("Error");
+                              console.error(e);
+                          });
+                      } else {
+                          message.channel.send("Join a voice channel first.");
+                          break;
+                      }
+                  }
+                  break;
+          }
+      }*/
 });
+
+client.ws.on('INTERACTION_CREATE', async interaction => {
+    client.api.interactions(interaction.id, interaction.token).callback.post({
+        data: {
+            type: 4,
+            data: {
+                content: 'hom???'
+            }
+        }
+    })
+})
 
 client.on('ready', function() {
     logch = client.channels.resolve(logchId);
+
+    client.api.applications(client.user.id).guilds('711937929085452338').commands.post({
+        data: {
+            name: 'hom',
+            description: 'Пишет Hom!'
+        }
+    })
+
     console.log("Ready");
 });
 
