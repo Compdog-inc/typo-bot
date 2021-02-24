@@ -244,7 +244,7 @@ client.on('message', function(message) {
 client.ws.on('INTERACTION_CREATE', async interaction => {
     client.api.interactions(interaction.id, interaction.token).callback.post({
         data: {
-            type: 4,
+            type: 3,
             data: {
                 content: 'hom???'
             }
@@ -258,9 +258,15 @@ client.on('ready', function() {
     client.api.applications(client.user.id).guilds('711937929085452338').commands.post({
         data: {
             name: 'hom',
-            description: 'Пишет Hom!'
+            description: 'Пишет Hom!',
+            options: [{
+                "name": "количество",
+                "description": "Сколько 'Hom!' писать, если ничего будет 1",
+                "type": 4,
+                "required": false
+            }]
         }
-    })
+    });
 
     console.log("Ready");
 });
