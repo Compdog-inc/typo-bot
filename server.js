@@ -6,7 +6,7 @@ const client = new Discord.Client();
 const logchId = "806181322451845130";
 var logch = null;
 
-var helpResponses = ["Сам знаешь что я делаю!", "Принеси еду, покажу.", "Отстань", "Дай поспать", "Я в туалете, подожди!", "Да достали вы все!\nВот что я делаю:\n1. Тупо Ничего", "Ладно, вот настоящие команды:\n1. ~help\n2. ~hom [?int]\n3. ~carp\n4. ~status [?online|idle|invisible|dnd]\n5. ~activity [?ACTIVITY-TYPE] [?ACTIVITY-NAME]\n6. ~src\n7. ~sing [?stop]"];
+var helpResponses = ["Сам знаешь что я делаю!", "Принеси еду, покажу.", "Отстань", "Дай поспать", "Я в туалете, подожди!", "Да достали вы все!\nВот что я делаю:\n1. Тупо Ничего", "Ладно, вот настоящие команды:\n1. /help\n2. /hom [?int]\n3. /carp\n4. /status [?online|idle|invisible|dnd]\n5. /activity [?ACTIVITY-TYPE] [?ACTIVITY-NAME]\n6. /src\n7. /sing [?stop]"];
 var pingResponses = ["Меня звали?", "Что", "Чего вам надо?", "Я тут!", "Надоел! Дай поесть!", "Замолчи", "...", ":|", "Да...", "Я не хочу идти!", "Error (404): Brain not Found", "Я тебе зачем", "Дай потупить", "Ты тупой?"];
 
 var helpResponsesUsed = [];
@@ -255,6 +255,15 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
 client.on('ready', function() {
     logch = client.channels.resolve(logchId);
 
+    //help command
+    client.api.applications(client.user.id).guilds('711937929085452338').commands.post({
+        data: {
+            name: 'help',
+            description: 'Даёт все команды'
+        }
+    });
+
+    //hom command
     client.api.applications(client.user.id).guilds('711937929085452338').commands.post({
         data: {
             name: 'hom',
@@ -265,6 +274,106 @@ client.on('ready', function() {
                 "type": 4,
                 "required": false
             }]
+        }
+    });
+
+    //carp command
+    client.api.applications(client.user.id).guilds('711937929085452338').commands.post({
+        data: {
+            name: 'carp',
+            description: 'Посылает карася'
+        }
+    });
+
+    //status command
+    client.api.applications(client.user.id).guilds('711937929085452338').commands.post({
+        data: {
+            name: 'status',
+            description: 'Меняет статус бота',
+            options: [{
+                "name": "статус",
+                "description": "Новый статус бота, если ничего, то online",
+                "type": 3,
+                "required": false,
+                choices: [{
+                        name: "online",
+                        value: "online"
+                    },
+                    {
+                        name: "idle",
+                        value: "idle"
+                    },
+                    {
+                        name: "invisible",
+                        value: "invisible"
+                    },
+                    {
+                        name: "dnd",
+                        value: "dnd"
+                    }
+                ]
+            }]
+        }
+    });
+
+    //activity command
+    client.api.applications(client.user.id).guilds('711937929085452338').commands.post({
+        data: {
+            name: 'activity',
+            description: 'Меняет занятие бота',
+            options: [{
+                    "name": "тип",
+                    "description": "Тип занятие, если ничего то playing",
+                    "type": 3,
+                    "required": false,
+                    choices: [{
+                            name: "playing",
+                            value: "playing"
+                        },
+                        {
+                            name: "watching",
+                            value: "watching"
+                        },
+                        {
+                            name: "listening",
+                            value: "listening"
+                        }
+                    ]
+                },
+                {
+                    "name": "занятие",
+                    "description": "Само занятие",
+                    "type": 3,
+                    "required": true
+                }
+            ]
+        }
+    });
+
+    //src command
+    client.api.applications(client.user.id).guilds('711937929085452338').commands.post({
+        data: {
+            name: 'src',
+            description: 'Даёт ссылку на код бота'
+        }
+    });
+
+    //sing command
+    client.api.applications(client.user.id).guilds('711937929085452338').commands.post({
+        data: {
+            name: 'sing',
+            description: 'Заставляет бота петь',
+            options: [{
+                    "name": "start",
+                    "description": "Начать петь",
+                    "type": 1
+                },
+                {
+                    "name": "stop",
+                    "description": "Прекратить петь",
+                    "type": 1
+                }
+            ]
         }
     });
 
