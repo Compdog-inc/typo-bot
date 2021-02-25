@@ -6,7 +6,7 @@ const client = new Discord.Client();
 const logchId = "806181322451845130";
 var logch = null;
 
-var helpResponses = ["Сам знаешь что я делаю!", "Принеси еду, покажу.", "Отстань", "Дай поспать", "Я в туалете, подожди!", "Да достали вы все!\nВот что я делаю:\n1. Тупо Ничего", "Ладно, вот настоящие команды:\n1. /help\n2. /hom [?int]\n3. /carp\n4. /status [?online|idle|invisible|dnd]\n5. /activity [?ACTIVITY-TYPE] [?ACTIVITY-NAME]\n6. /src\n7. /sing [?stop]"];
+var helpResponses = ["Сам знаешь что я делаю!", "Принеси еду, покажу.", "Отстань", "Дай поспать", "Я в туалете, подожди!", "Да достали вы все!\nВот что я делаю:\n1. Тупо Ничего", "Ладно, вот настоящие команды:\n1. /help\n2. /hom [?int]\n3. /carp\n4. /status [?online|idle|invisible|dnd]\n5. /activity [?ACTIVITY-TYPE] [?ACTIVITY-NAME]\n6. /src\n7. /sing [?start|stop]"];
 var pingResponses = ["Меня звали?", "Что", "Чего вам надо?", "Я тут!", "Надоел! Дай поесть!", "Замолчи", "...", ":|", "Да...", "Я не хочу идти!", "Error (404): Brain not Found", "Я тебе зачем", "Дай потупить", "Ты тупой?"];
 
 var helpResponsesUsed = [];
@@ -242,14 +242,137 @@ client.on('message', function(message) {
 });
 
 client.ws.on('INTERACTION_CREATE', async interaction => {
-    client.api.interactions(interaction.id, interaction.token).callback.post({
-        data: {
-            type: 3,
-            data: {
-                content: 'hom???'
-            }
-        }
-    })
+    const command = interaction.data.name.toLowerCase();
+    const args = interaction.data.options;
+
+    switch (command) {
+        case "help":
+            client.api.interactions(interaction.id, interaction.token).callback.post({
+                data: {
+                    type: 3,
+                    data: {
+                        flags: 64,
+                        content: helpResponses[helpResponses.length - 1]
+                    }
+                }
+            });
+            break;
+        case "hom":
+            var txt = "";
+            if (args.length > 0 && args[0].name === "количество" && args[0].value) {
+                var n = parseInt(args[0].value);
+                if (n == 0)
+                    txt += "~~???~~";
+                else if (n < 0 && n >= -396) {
+                    txt += "~~";
+                    for (var i = 0; i < Math.abs(n); i++) {
+                        txt += "Hom! ";
+                    }
+                    txt += "~~";
+                } else if (n < -396)
+                    txt += "Hom! -∞"
+                else if (n <= 400) {
+                    for (var i = 0; i < n; i++) {
+                        txt += "Hom! ";
+                    }
+                } else if (n > 400)
+                    txt += "Hom! ∞"
+                else
+                    txt += "???";
+            } else
+                txt = "Hom!";
+            client.api.interactions(interaction.id, interaction.token).callback.post({
+                data: {
+                    type: 4,
+                    data: {
+                        content: txt
+                    }
+                }
+            });
+            break;
+        case "carp":
+            client.api.interactions(interaction.id, interaction.token).callback.post({
+                data: {
+                    type: 4,
+                    data: {
+                        content: "Вот:",
+                        embeds: [
+                            new Discord.MessageEmbed().setImage("./images/carp.gif")
+                        ]
+                    }
+                }
+            });
+            break;
+        case "status":
+            // if (args.length > 0) {
+            //     client.user.setStatus(args[1].toLowerCase());
+            // } else {
+            //     client.user.setStatus('online');
+            // }
+            break;
+        case "activity":
+            // if (args.length > 2) {
+            //     client.user.setActivity(args[2], { type: args[1].toUpperCase() });
+            // } else if (args.length > 1) {
+            //     client.user.setActivity(args[1], { type: 'PLAYING' });
+            // } else {
+            //     client.user.setActivity();
+            // }
+            break;
+        case "src":
+            client.api.interactions(interaction.id, interaction.token).callback.post({
+                data: {
+                    type: 3,
+                    data: {
+                        flags: 64,
+                        content: "https://github.com/Compdog-inc/typo-bot"
+                    }
+                }
+            });
+            break;
+        case "sing":
+            // if (args.length > 1) {
+            //     if (args[1].toLowerCase() == "stop") {
+            //         if (connectedVoice) {
+            //             connectedVoice.disconnect();
+            //             message.channel.send("Disconnected");
+            //         } else
+            //             message.channel.send("Not connected to voice channel.");
+            //         connectedVoice = null;
+            //         break;
+            //     }
+            // }
+            // if (connectedVoice == null) {
+            //     if (message.member.voice && message.member.voice.channel) {
+            //         message.member.voice.channel.join().then(connection => {
+            //             connectedVoice = connection;
+            //             message.channel.send("Connected");
+            //             playSong(connection);
+            //         }).catch(e => {
+            //             message.channel.send("Error");
+            //             console.error(e);
+            //         });
+            //     } else {
+            //         message.channel.send("Join a voice channel first.");
+            //         break;
+            //     }
+            // } else if (message.member.voice && message.member.voice.channel != connectedVoice) {
+            //     if (message.member.voice && message.member.voice.channel) {
+            //         message.member.voice.channel.join().then(connection => {
+            //             connectedVoice = connection;
+            //             message.channel.send("Connected");
+            //             playSong(connection);
+            //         }).catch(e => {
+            //             message.channel.send("Error");
+            //             console.error(e);
+            //         });
+            //     } else {
+            //         message.channel.send("Join a voice channel first.");
+            //         break;
+            //     }
+            // }
+            break;
+    }
 })
 
 client.on('ready', function() {
