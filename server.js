@@ -259,7 +259,7 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
             break;
         case "hom":
             var txt = "";
-            if (args.length > 0 && args[0].name === "количество" && args[0].value) {
+            if (args && args.length > 0 && args[0].name === "количество" && args[0].value) {
                 var n = parseInt(args[0].value);
                 if (n == 0)
                     txt += "~~???~~";
@@ -297,27 +297,26 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
                     data: {
                         content: "Вот:",
                         embeds: [
-                            new Discord.MessageEmbed().setImage("./images/carp.gif")
+                            new Discord.MessageEmbed().setImage("http://compdog.tk/public-files/images/carp.gif.fl")
                         ]
                     }
                 }
             });
             break;
         case "status":
-            // if (args.length > 0) {
-            //     client.user.setStatus(args[1].toLowerCase());
-            // } else {
-            //     client.user.setStatus('online');
-            // }
+            if (args && args.length > 0 && args[0].name === "статус" && args[0].value)
+                client.user.setStatus(args[0].value.toString().toLowerCase());
+            else
+                client.user.setStatus('online');
             break;
         case "activity":
-            // if (args.length > 2) {
-            //     client.user.setActivity(args[2], { type: args[1].toUpperCase() });
-            // } else if (args.length > 1) {
-            //     client.user.setActivity(args[1], { type: 'PLAYING' });
-            // } else {
-            //     client.user.setActivity();
-            // }
+            if (args && args.length > 0 && args[0].name === "тип" && args[0].value) {
+                if (args.length > 1 && args[1].name === "занятие" && args[1].value)
+                    client.user.setActivity(args[1].value.toString(), { type: args[0].value.toString().toUpperCase() });
+                else
+                    client.user.setActivity(args[0].value.toString(), { type: 'PLAYING' });
+            } else
+                client.user.setActivity();
             break;
         case "src":
             client.api.interactions(interaction.id, interaction.token).callback.post({
@@ -445,15 +444,10 @@ client.on('ready', function() {
             name: 'activity',
             description: 'Меняет занятие бота',
             options: [{
-                "name": "занятие",
-                "description": "Само занятие",
-                "type": 3,
-                "required": true
-            }, {
                 "name": "тип",
-                "description": "Тип занятие, если ничего то playing",
+                "description": "Тип занятие",
                 "type": 3,
-                "required": false,
+                "required": true,
                 choices: [{
                         name: "playing",
                         value: "playing"
@@ -467,6 +461,11 @@ client.on('ready', function() {
                         value: "listening"
                     }
                 ]
+            }, {
+                "name": "занятие",
+                "description": "Само занятие",
+                "type": 3,
+                "required": true
             }]
         }
     });
