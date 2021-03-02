@@ -316,6 +316,7 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
             });
             break;
         case "activity":
+            console.log(args);
             if (args && args.length > 0 && args[0].name === "тип" && args[0].value) {
                 if (args.length > 1 && args[1].name === "занятие" && args[1].value)
                     client.user.setActivity(args[1].value.toString(), { type: args[0].value.toString().toUpperCase() });
@@ -461,28 +462,33 @@ client.on('ready', function() {
             name: 'activity',
             description: 'Меняет занятие бота',
             options: [{
-                    "name": "тип",
-                    "description": "Тип занятие",
-                    "type": 3,
-                    "required": true,
-                    choices: [{
-                            name: "playing",
-                            value: "playing"
-                        },
-                        {
-                            name: "watching",
-                            value: "watching"
-                        },
-                        {
-                            name: "listening",
-                            value: "listening"
-                        }
-                    ]
-                }, {
-                    "name": "занятие",
-                    "description": "Само занятие",
-                    "type": 3,
-                    "required": true
+                    "name": "set",
+                    "description": "Поменять занятие",
+                    "type": 1,
+                    options: [{
+                        "name": "тип",
+                        "description": "Тип занятие",
+                        "type": 3,
+                        "required": true,
+                        choices: [{
+                                name: "playing",
+                                value: "playing"
+                            },
+                            {
+                                name: "watching",
+                                value: "watching"
+                            },
+                            {
+                                name: "listening",
+                                value: "listening"
+                            }
+                        ]
+                    }, {
+                        "name": "занятие",
+                        "description": "Само занятие",
+                        "type": 3,
+                        "required": true
+                    }]
                 },
                 {
                     "name": "clear",
