@@ -308,6 +308,12 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
                 client.user.setStatus(args[0].value.toString().toLowerCase());
             else
                 client.user.setStatus('online');
+
+            client.api.interactions(interaction.id, interaction.token).callback.post({
+                data: {
+                    type: 5
+                }
+            });
             break;
         case "activity":
             if (args && args.length > 0 && args[0].name === "тип" && args[0].value) {
@@ -317,6 +323,12 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
                     client.user.setActivity(args[0].value.toString(), { type: 'PLAYING' });
             } else
                 client.user.setActivity();
+
+            client.api.interactions(interaction.id, interaction.token).callback.post({
+                data: {
+                    type: 5
+                }
+            });
             break;
         case "src":
             client.api.interactions(interaction.id, interaction.token).callback.post({
@@ -370,6 +382,11 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
             //         break;
             //     }
             // }
+            client.api.interactions(interaction.id, interaction.token).callback.post({
+                data: {
+                    type: 5
+                }
+            });
             break;
     }
 })
