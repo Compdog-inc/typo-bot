@@ -319,12 +319,14 @@ client.ws.on('INTERACTION_CREATE', async interaction => {
             if (args && args.length > 0 && args[0].name === "clear")
                 client.user.setActivity();
             else if (args && args.length > 0 && args[0].name === "set") {
-                console.log(JSON.stringify(args[0].options));
-                if (args && args.length > 0 && args[0].name === "тип" && args[0].value) {
-                    if (args.length > 1 && args[1].name === "занятие" && args[1].value)
-                        client.user.setActivity(args[1].value.toString(), { type: args[0].value.toString().toUpperCase() });
-                    else
-                        client.user.setActivity(args[0].value.toString(), { type: 'PLAYING' });
+                if (args[0].options && args[0].options.length > 0) {
+                    if (args[0].options[0].name === "тип" && args[0].options[0].value) {
+                        if (args[0].options[1].name === "занятие" && args[0].options[1].value)
+                            client.user.setActivity(args[0].options[1].value.toString(), { type: args[0].options[0].value.toString().toUpperCase() });
+                        else
+                            client.user.setActivity(args[0].options[1].value.toString(), { type: 'PLAYING' });
+                    } else
+                        client.user.setActivity();
                 } else
                     client.user.setActivity();
             }
