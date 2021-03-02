@@ -461,29 +461,35 @@ client.on('ready', function() {
             name: 'activity',
             description: 'Меняет занятие бота',
             options: [{
-                "name": "тип",
-                "description": "Тип занятие",
-                "type": 3,
-                "required": true,
-                choices: [{
-                        name: "playing",
-                        value: "playing"
-                    },
-                    {
-                        name: "watching",
-                        value: "watching"
-                    },
-                    {
-                        name: "listening",
-                        value: "listening"
-                    }
-                ]
-            }, {
-                "name": "занятие",
-                "description": "Само занятие",
-                "type": 3,
-                "required": true
-            }]
+                    "name": "clear",
+                    "description": "Убрать занятие",
+                    "type": 1
+                },
+                {
+                    "name": "тип",
+                    "description": "Тип занятие",
+                    "type": 3,
+                    "required": true,
+                    choices: [{
+                            name: "playing",
+                            value: "playing"
+                        },
+                        {
+                            name: "watching",
+                            value: "watching"
+                        },
+                        {
+                            name: "listening",
+                            value: "listening"
+                        }
+                    ]
+                }, {
+                    "name": "занятие",
+                    "description": "Само занятие",
+                    "type": 3,
+                    "required": true
+                }
+            ]
         }
     });
 
